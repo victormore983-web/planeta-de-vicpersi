@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- MANIFEST -->
+<link rel="manifest" href="manifest.json">
+
+<!-- ICONO NORMAL -->
+<link rel="icon" type="image/png" sizes="32x32" href="image/icon-32.png">
+
+<!-- IOS -->
+<link rel="apple-touch-icon" href="image/icon-152.png">
+
+<!-- IOS modo app -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="MiApp">
+
+<!-- COLOR ANDROID -->
+<meta name="theme-color" content="#ffffff">
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Galaxy  de VicPersi💖</title>
+    <link rel="icon" type="image/png" href="/heart.png" sizes="16x16" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Importmap cho THREE.js -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.152.2/build/three.module.js",
+        "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.152.2/examples/jsm/controls/OrbitControls.js",
+        "three/examples/jsm/loaders/FontLoader.js": "https://unpkg.com/three@0.152.2/examples/jsm/loaders/FontLoader.js",
+        "three/examples/jsm/geometries/TextGeometry.js": "https://unpkg.com/three@0.152.2/examples/jsm/geometries/TextGeometry.js"
+      }
+    }
+  </script>
+
+    <style>
+        .text-white {
+            color: white !important;
+        }
+
+        .btn-audio-toggle {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .music-status {
+            display: flex;
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            z-index: 9999;
+            align-items: center;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+
+        .music-status .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #a259f7;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        body.portrait-mode #landscape-warning {
+            display: flex;
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+
+    <div id="landscape-warning">
+    <div class="warning-content">
+        <div class="rotate-icon"></div>
+        <h1>Planeta de</h1>
+        <h1>Vic Persi</h1>
+        <p style="font-size: 0.6em;">¡Gire la pantalla horizontalmente para ver algo especial!</p>
+        <p style="font-size: 0.6em;">Recuerde tocar el planeta en el centro para abrir un regalo secreto.</p>
+        <div class="stars-bg"></div>
+    </div>
+</div>
+
+
+    <div id="dark-overlay"></div>
+    <div id="info"></div>
+
+    <script>
+        window.dataLove2Loveloom = {
+            template: "galaxy",
+            data: {
+                keychain: { name: "TE AMO", phone: "TE AMO", address: "TE AMO" },
+                ringTexts: ["VIC PERSI"],
+            }
+        };
+    </script>
+
+    <script type="module" src="./script.js"></script>
+
+    <!-- Khởi tạo Music Manager -->
+    <script>
+    window.musicManager = {
+        audio: null,
+        isPlaying: false,
+
+        init() {
+            this.audio = new Audio('Good.mp3');
+            this.audio.loop = true;
+            this.audio.volume = 0.7;
+            this.audio.preload = "auto";
+
+            this.audio.onplay = () => {
+                this.isPlaying = true;
+                this.updateUI();
+            };
+
+            this.audio.onpause = () => {
+                this.isPlaying = false;
+                this.updateUI();
+            };
+
+            this.updateUI();
+        },
+
+        play() {
+            if (!this.audio) return Promise.reject('Audio no inicializado');
+            return this.audio.play().catch(e => {
+                console.warn('Error al reproducir música:', e);
+                throw e;
+            });
+        },
+
+        togglePlayback() {
+            if (!this.audio) return;
+            if (this.audio.paused) {
+                this.audio.play().catch(e => {
+                    console.warn('Error al reproducir música:', e);
+                });
+            } else {
+                this.audio.pause();
+            }
+        },
+
+        updateUI() {
+            const icon = document.getElementById('audio-icon');
+            if (!icon) return;
+            if (this.isPlaying) {
+                icon.classList.remove('fa-volume-xmark');
+                icon.classList.add('fa-volume-high');
+            } else {
+                icon.classList.remove('fa-volume-high');
+                icon.classList.add('fa-volume-xmark');
+            }
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        window.musicManager.init();
+        const toggleButton = document.getElementById('toggle-audio');
+        if (toggleButton) {
+            toggleButton.addEventListener('click', () => {
+                window.musicManager.togglePlayback();
+            });
+        } else {
+            console.warn('Botón toggle-audio no encontrado');
+        }
+    });
+</script>
+</body>
+
+</html>
